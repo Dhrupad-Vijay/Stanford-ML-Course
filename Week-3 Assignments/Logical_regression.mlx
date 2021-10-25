@@ -1,0 +1,59 @@
+clear all
+data = load('ex2data1.txt');
+X = data(:, 1:2); 
+y = data(:, 3);
+%X = mapFeature1(X(:,1),X(:,2));
+[m, n] = size(X);
+X = [ones(m,1),X];
+theta = zeros(n+1 , 1);
+alpha = .1;
+lambda = 1;
+num_iter = 400;
+theta = gradlog(X,y,theta,alpha,lambda,num_iter);
+%disp(X*theta);
+%in = mapFeature1(0.322,0.69225);
+disp([1,1.0709,0.10015]*theta);
+
+function theta = gradlog(X,y,theta,alpha,lambda,num_iter)
+
+m = length(y);
+for i=1:num_iter
+%    [J, grad] = costFunction1(theta, X, y,lambda);
+    z = X*theta;
+    grad = (1/m)*(X'*(sigmoid1(z)-y));
+    theta = theta - (alpha/m).*grad;
+%     J(i)=J;
+end
+end
+
+function out = mapFeature1(X1, X2)
+c = 2;
+degree = 6;
+out = ones(size(X1(:,1)));
+for i = 1:degree
+    for j = 0:i
+        out(:, c) = (X1.^(i-j)).*(X2.^j);
+        c = c+1;
+    end
+end
+
+end
+
+function [J, grad] = costFunction1(theta, X, y,lambda)
+
+m = length(y);
+J = 0;
+z = X*theta;
+grad = zeros(size(theta));
+t = length(theta);
+J = (1/m).*((-y')*log(sigmoid1(z)) - ((1-y)')*log(1-sigmoid1(z))) + (lambda/(2*m))*(theta(2:t)'*theta(2:t));
+grad(1) = (1/m)*(X(:,1)'*(sigmoid1(z)-y));
+grad(2:t,1) = grad(2:t,1) + (lambda/m).*theta(2:t,1);
+end
+
+function g = sigmoid1(z)
+
+g = zeros(size(z));
+g = 1./(1+exp(-z));
+
+end
