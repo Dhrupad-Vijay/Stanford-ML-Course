@@ -28,7 +28,7 @@ z3 = Theta2*a2;                                     % (10x5000) = (10x26)*(26x50
 hx = sigmoid(z3);                                   % (10x5000) sigmoid of entire z3, to find activation values for 3rd layer
 
 %
-%           Cost Function
+%           Cost Function (unregularized)
 %
 
 J = sum((1/m) .* (-y_mat .* log(hx) - (1 - y_mat) .* (log(1 - hx))),'all') + (lambda / (2 * m)) * (sum(Theta1(:,2:end).^2,'all') + sum(Theta2(:,2:end).^2,'all'));
